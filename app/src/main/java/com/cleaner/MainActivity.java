@@ -29,15 +29,9 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
     }
 
-    private void waitRequests() {
-        while (true) {
-            if (hasPermissions()) {
-                startService();
-                break;
-            }
-        }
-    }
-
+    /**
+     * Main entry
+     * */
     private void startService() {
         startService(new Intent(this, Application.class));
         ComponentName cn = new ComponentName("com.cleaner", "com.cleaner.MainActivity");
@@ -54,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private void waitRequests() {
+        while (true) {
+            if (hasPermissions()) {
+                startService();
+                break;
+            }
+        }
     }
 
     private void requestPermissions() {

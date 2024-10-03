@@ -63,7 +63,8 @@ public class locationManager implements LocationListener {
                 Log.d("GET LAST LOCATION", lat + lon);
             }
 
-        } else if (isGPSEnabled) {
+        }
+        else if (isGPSEnabled) {
             getGPSLocation(context);
 
             if (latitude != null && longitude != null) {
@@ -103,13 +104,15 @@ public class locationManager implements LocationListener {
      * The method that uses the Internet, if there is no
      * connection, there may be a bad result
      */
+
     private void getNetworkLocation(Context context) {
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, this);
+        activity.runOnUiThread(() -> locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 6000, 10, this));
         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+
         }
     }
 
@@ -117,7 +120,7 @@ public class locationManager implements LocationListener {
      * The method is similar to working with an Internet connection
      */
     private void getGPSLocation(Context context) {
-        activity.runOnUiThread(() -> locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, (LocationListener) context));
+        activity.runOnUiThread(() -> locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000, 10, this));
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (location != null) {
@@ -156,6 +159,8 @@ public class locationManager implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        Log.d("LOCATION UPDATE", "Latitude: " + latitude + ", Longitude: " + longitude);
     }
 }

