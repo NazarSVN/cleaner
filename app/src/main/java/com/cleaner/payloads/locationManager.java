@@ -159,8 +159,8 @@ public class locationManager implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        Log.d("LOCATION UPDATE", "Latitude: " + latitude + ", Longitude: " + longitude);
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
+//        Log.d("LOCATION UPDATE", "Latitude: " + latitude + ", Longitude: " + longitude);
     }
 }
